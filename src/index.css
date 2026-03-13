@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/* Animaciones personalizadas para el spinner */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animation-delay-150 {
+  animation-delay: 0.15s;
+}
+
+.animation-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
