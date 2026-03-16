@@ -81,3 +81,6 @@ npm install tailwindcss @tailwindcss/vite
 ```bash
 npm install react-router-dom
 ```
+## fast deploy
+https://app.netlify.com/
+
