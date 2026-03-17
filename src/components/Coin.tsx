@@ -1,30 +1,25 @@
-import { useState } from "react";
+import { useContext } from "react";
 import type { CoinInterface } from "../interfaces/Coin";
 import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
+import { FavoritesContext } from "../context/FavoritesContext";
 
 interface CoinProps extends CoinInterface {
     onFavoriteChange?: (coinId: string, isFavorite: boolean) => void;
 }
 
 const Coin =({ id,name, symbol, current_price, price_change_24h, image, onFavoriteChange }: CoinProps) => {
-    const [isFavorite, setIsFavorite] = useState<boolean>(() => {
-        const favorites = JSON.parse(localStorage.getItem("favorites") || "[]") as string[];
-        return favorites.includes(id);
-    });
+   
+    const {isFavorite,addFavorite, removeFavorite} = useContext(FavoritesContext);
 
     const handleFavorites = () => {
-        const favorites = JSON.parse(localStorage.getItem("favorites") || "[]") as string[];
-        const isAlreadyFavorite = favorites.includes(id);
-
-        const updatedFavorites = isAlreadyFavorite
-            ? favorites.filter((favoriteId) => favoriteId !== id)
-            : [...favorites, id];
-
-        localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-        const nextFavoriteState = !isAlreadyFavorite;
-        setIsFavorite(nextFavoriteState);
-        onFavoriteChange?.(id, nextFavoriteState);
+        if(isFavorite(id)){
+            removeFavorite(id);
+            onFavoriteChange?.(id, false);
+        }else{
+            addFavorite(id);
+            onFavoriteChange?.(id, true);
+        }
     }
     return(
         <tr className="hover:bg-gray-50 transition-colors">
@@ -51,16 +46,16 @@ const Coin =({ id,name, symbol, current_price, price_change_24h, image, onFavori
                 <button 
                     onClick={handleFavorites}
                     className={`inline-flex h-10 w-10 items-center justify-center rounded-md border transition-all ${
-                        isFavorite 
+                        isFavorite(id) 
                             ? "border-yellow-200 bg-yellow-50 hover:bg-yellow-100" 
                             : "border-gray-200 bg-gray-100 hover:bg-gray-200"
                     }`}
-                    aria-label={isFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
-                    title={isFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
+                    aria-label={isFavorite(id) ? "Quitar de favoritos" : "Agregar a favoritos"}
+                    title={isFavorite(id) ? "Quitar de favoritos" : "Agregar a favoritos"}
                 >
                     <Star
                         className={`h-5 w-5 ${
-                            isFavorite
+                            isFavorite(id)
                                 ? "fill-yellow-400 text-yellow-500"
                                 : "fill-white text-gray-400"
                         }`}

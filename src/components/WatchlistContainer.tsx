@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 
 import type { CoinInterface } from "../interfaces/Coin";
 
@@ -6,21 +6,13 @@ import { useEffect } from "react";
 import CoinsTable from "./CoinsTable";
 import Spinner from "./Spinner";
 import { URL_API,URL_COINS } from "../constants/api";
+import { FavoritesContext } from "../context/FavoritesContext";
 const WatchlistContainer = () => {
   
   const [coinList, setCoinList] = useState<CoinInterface[]>([]);
   const [coinListOriginal, setCoinListOriginal] = useState<CoinInterface[]>([]);
-  const [favoriteIds] = useState<string[]>(() => {
-    try {
-      const parsedFavorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-      if (!Array.isArray(parsedFavorites)) {
-        return [];
-      }
-      return parsedFavorites.filter((favoriteId): favoriteId is string => typeof favoriteId === "string");
-    } catch {
-      return [];
-    }
-  });
+  const { favorites: favoriteIds } = useContext(FavoritesContext);
+
   const hasFavorites = favoriteIds.length > 0;
 
   const [loading, setLoading] = useState<boolean>(hasFavorites);

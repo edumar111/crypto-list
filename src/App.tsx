@@ -12,22 +12,25 @@ import CoinsContainer from "./components/CoinsContainer";
 import NotFound from "./components/NotFound";
 import WatchlistContainer from "./components/WatchlistContainer";
 import CoinContainer from "./components/CoinContainer";
+import { FavoritesProvider } from "./context/FavoritesProvider";
 
 
 
 const App = () => {
 
   return (
-   <BrowserRouter>
-     <Routes> 
-        <Route path="/" element={<Layaout />} >
-          <Route index element={<CoinsContainer />} />
-          <Route path="watchList" element={<WatchlistContainer />} ></Route>
-          <Route path="coin/:id" element={<CoinContainer />} ></Route>
-          <Route path="*" element={<NotFound />} />
-        </Route>
-     </Routes>
-   </BrowserRouter>
+    <FavoritesProvider>
+      <BrowserRouter>
+        <Routes> 
+            <Route path="/" element={<Layaout />} >
+              <Route index element={<CoinsContainer />} />
+              <Route path="watchList" element={<WatchlistContainer />} ></Route>
+              <Route path="coin/:id" element={<CoinContainer />} ></Route>
+              <Route path="*" element={<NotFound />} />
+            </Route>
+        </Routes>
+      </BrowserRouter>
+    </FavoritesProvider>
   );
 }
 
