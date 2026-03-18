@@ -12,6 +12,7 @@ import CoinsContainer from "./components/CoinsContainer";
 import NotFound from "./components/NotFound";
 import WatchlistContainer from "./components/WatchlistContainer";
 import CoinContainer from "./components/CoinContainer";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 
 
@@ -29,6 +30,7 @@ const App = () => {
               <Route path="*" element={<NotFound />} />
             </Route>
         </Routes>
+        <ReactQueryDevtools initialIsOpen={false} />
       </BrowserRouter>
    
   );

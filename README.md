@@ -90,3 +90,8 @@ https://app.netlify.com/
 ```bash
 yarn add zustand
 ```
+
+## install tanstack
+```bash
+yarn add @tanstack/react-query @tanstack/react-query-devtools 
+```
