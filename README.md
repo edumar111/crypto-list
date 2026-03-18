@@ -84,3 +84,9 @@ npm install react-router-dom
 ## fast deploy
 https://app.netlify.com/
 
+
+## install zustand
+
+```bash
+yarn add zustand
+```

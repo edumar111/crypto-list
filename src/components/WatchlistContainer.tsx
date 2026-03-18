@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import {  useRef, useState } from "react";
 
 import type { CoinInterface } from "../interfaces/Coin";
 
@@ -6,12 +6,13 @@ import { useEffect } from "react";
 import CoinsTable from "./CoinsTable";
 import Spinner from "./Spinner";
 import { URL_API,URL_COINS } from "../constants/api";
-import { FavoritesContext } from "../context/FavoritesContext";
+
+import { useFavoritesStore } from "../store/FavoritesStore";
 const WatchlistContainer = () => {
   
   const [coinList, setCoinList] = useState<CoinInterface[]>([]);
   const [coinListOriginal, setCoinListOriginal] = useState<CoinInterface[]>([]);
-  const { favorites: favoriteIds } = useContext(FavoritesContext);
+  const { favorites: favoriteIds } = useFavoritesStore();
 
   const hasFavorites = favoriteIds.length > 0;
 

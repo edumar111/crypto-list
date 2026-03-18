@@ -1,8 +1,9 @@
-import { useContext } from "react";
+
 import type { CoinInterface } from "../interfaces/Coin";
 import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
-import { FavoritesContext } from "../context/FavoritesContext";
+
+import { useFavoritesStore } from "../store/FavoritesStore";
 
 interface CoinProps extends CoinInterface {
     onFavoriteChange?: (coinId: string, isFavorite: boolean) => void;
@@ -10,7 +11,7 @@ interface CoinProps extends CoinInterface {
 
 const Coin =({ id,name, symbol, current_price, price_change_24h, image, onFavoriteChange }: CoinProps) => {
    
-    const {isFavorite,addFavorite, removeFavorite} = useContext(FavoritesContext);
+    const {isFavorite,addFavorite, removeFavorite} = useFavoritesStore();
 
     const handleFavorites = () => {
         if(isFavorite(id)){

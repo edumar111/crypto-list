@@ -12,14 +12,14 @@ import CoinsContainer from "./components/CoinsContainer";
 import NotFound from "./components/NotFound";
 import WatchlistContainer from "./components/WatchlistContainer";
 import CoinContainer from "./components/CoinContainer";
-import { FavoritesProvider } from "./context/FavoritesProvider";
+
 
 
 
 const App = () => {
 
   return (
-    <FavoritesProvider>
+ 
       <BrowserRouter>
         <Routes> 
             <Route path="/" element={<Layaout />} >
@@ -30,7 +30,7 @@ const App = () => {
             </Route>
         </Routes>
       </BrowserRouter>
-    </FavoritesProvider>
+   
   );
 }
 

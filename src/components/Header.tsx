@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useFavoritesStore } from "../store/FavoritesStore";
 
 const Header = () => {
   return (
@@ -14,10 +15,10 @@ const Header = () => {
         {/* Menu */}
         <nav className="flex gap-6">
           <Link to="/" className="hover:text-blue-400 transition-colors">
-            Overview
+            Home
           </Link>
           <Link to="/watchlist" className="hover:text-blue-400 transition-colors">
-            Watchlist
+            Favorites({useFavoritesStore().favorites.length})
           </Link>
         </nav>
       </div>
