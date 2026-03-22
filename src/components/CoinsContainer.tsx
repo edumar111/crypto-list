@@ -3,7 +3,7 @@ import CoinsTable from "./CoinsTable";
 import Spinner from "./Spinner";
 import type { CoinInterface } from "../interfaces/Coin";
 import CoinsNotFound from "./CoinsNotFound";
-import { useCoins } from "../hooks/useCoin";
+import { useCoins } from "../hooks/useCoins";
 
 const CoinsContainer = () => {
   
