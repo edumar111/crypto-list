@@ -84,3 +84,17 @@ npm install react-router-dom
 ## fast deploy
 https://app.netlify.com/
 
+
+## install zustand
+
+```bash
+yarn add zustand
+```
+
+## install tanstack
+```bash
+yarn add @tanstack/react-query @tanstack/react-query-devtools 
+```
+
+## promps
+Quiero que /coin/[id] funcione con tanstack query y no con fetching en el useEffect, Puedes basarte de lo que se hizo en el home. Debes crear y usar un custom hook llamado useCoin. Debe verse claramente en una esquina de la pantalla que avise de un refetching.

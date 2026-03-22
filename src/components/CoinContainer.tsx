@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import { URL_API, URL_COINS } from "../constants/api";
 import { Link, useParams } from "react-router-dom";
-import type { CoinInterface } from "../interfaces/Coin";
 import Spinner from "./Spinner";
+import { useCoin } from "../hooks/useCoin";
 import {
     ArrowLeft,
     BarChart3,
@@ -51,31 +49,8 @@ const formatDate = (value?: string) => {
 };
 
 const CoinContainer = () => {
-    const [coin , setCoin] = useState<CoinInterface | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
     const { id } = useParams();
-
-    useEffect(() => {
-        if (!id) {
-            return;
-        }
-
-        fetch(`${URL_API}${URL_COINS}&ids=${id}`).then(res => res.json())
-        .then(data => {
-            if (data.length > 0) {
-                setCoin(data[0]);
-            } else {
-                setCoin(null);
-                setError("No se encontro informacion para esta moneda");
-            }
-        }).catch(fetchError => {
-            console.error("Error fetching coin data:", fetchError);
-            setError("Error fetching coin data");
-        }).finally(() => {
-            setLoading(false);
-        });
-    }, [id]);
+    const { data: coin, isLoading: loading, isRefetching, error } = useCoin(id);
 
     const priceRange = coin && coin.high_24h !== undefined && coin.low_24h !== undefined
         ? coin.high_24h - coin.low_24h
@@ -92,34 +67,48 @@ const CoinContainer = () => {
     const atlClass = coin && (coin.atl_change_percentage ?? 0) >= 0 ? "text-green-600" : "text-red-600";
 
     return(
-        <section className="space-y-4">
-            {!id ? (
-                <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
-                    <p className="font-semibold text-red-700">Moneda no encontrada</p>
-                    <Link
-                        to="/"
-                        className="mt-4 inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-400 hover:text-gray-900"
+        <>
+            {isRefetching ? (
+                <div className="pointer-events-none fixed right-4 top-4 z-50">
+                    <div
+                        role="status"
+                        aria-live="polite"
+                        className="flex items-center gap-2 rounded-full border border-sky-200 bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow-lg ring-4 ring-sky-100"
                     >
-                        <ArrowLeft className="h-4 w-4" />
-                        Volver al listado
-                    </Link>
+                        <RefreshCw className="h-4 w-4 animate-spin" />
+                        Actualizando datos...
+                    </div>
                 </div>
-            ) : loading ? (
-                <Spinner />
-            ) : error ? (
-                <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
-                    <p className="font-semibold text-red-700">{error}</p>
-                    <Link
-                        to="/"
-                        className="mt-4 inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-400 hover:text-gray-900"
-                    >
-                        <ArrowLeft className="h-4 w-4" />
-                        Volver al listado
-                    </Link>
-                </div>
-            ) : coin ? (
-                <>
-                    <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+            ) : null}
+
+            <section className="space-y-4">
+                {!id ? (
+                    <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
+                        <p className="font-semibold text-red-700">Moneda no encontrada</p>
+                        <Link
+                            to="/"
+                            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-400 hover:text-gray-900"
+                        >
+                            <ArrowLeft className="h-4 w-4" />
+                            Volver al listado
+                        </Link>
+                    </div>
+                ) : loading ? (
+                    <Spinner />
+                ) : error ? (
+                    <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
+                        <p className="font-semibold text-red-700">{error.message}</p>
+                        <Link
+                            to="/"
+                            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-400 hover:text-gray-900"
+                        >
+                            <ArrowLeft className="h-4 w-4" />
+                            Volver al listado
+                        </Link>
+                    </div>
+                ) : coin ? (
+                    <>
+                        <article className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
                         <div className="flex flex-wrap items-center justify-between gap-4">
                             <div className="flex items-center gap-4">
                                 <img src={coin.image} alt={coin.symbol} className="h-12 w-12 rounded-full" />
@@ -317,14 +306,15 @@ const CoinContainer = () => {
                                 <span className="text-sm font-semibold text-gray-900">{formatDate(coin.last_updated)}</span>
                             </div>
                         </div>
-                    </article>
-                </>
-            ) : (
-                <div className="rounded-xl border border-gray-200 bg-white p-6 text-center shadow-sm">
-                    <p className="text-gray-600">No hay datos disponibles para esta moneda.</p>
-                </div>
-            )}
-        </section>
+                        </article>
+                    </>
+                ) : (
+                    <div className="rounded-xl border border-gray-200 bg-white p-6 text-center shadow-sm">
+                        <p className="text-gray-600">No hay datos disponibles para esta moneda.</p>
+                    </div>
+                )}
+            </section>
+        </>
     )
 }
 
